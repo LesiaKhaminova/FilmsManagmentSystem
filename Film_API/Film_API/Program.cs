@@ -36,7 +36,13 @@ builder.WebHost.UseUrls("https://localhost:7269");
 
 var app = builder.Build();
 
-app.UseCors("AllowReactApp"); 
+app.UseCors("AllowReactApp");
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
